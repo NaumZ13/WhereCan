@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Products\StoreRequest;
+use App\Http\Requests\Products\UpdateRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ClientProductsController extends Controller
 {
+    public function index()
+    {
+        return inertia('Clients/Products/Index');
+    }
+
     public function create()
     {
         return inertia('Clients/Products/Create');
@@ -28,5 +34,35 @@ class ClientProductsController extends Controller
         ]);
 
         return to_route('client.dashboard')->with('success', 'Product created successfully');
+    }
+
+    public function edit(Product $product)
+    {
+        return inertia('Clients/Products/Edit', [
+            'product' => $product,
+        ]);
+    }
+
+    public function update(UpdateRequest $request, Product $product)
+    {
+        $data = $request->validated();
+
+        $product->update($data);
+
+        return to_route('client.products.index')->with('success', 'Product updated successfully');
+    }
+
+    public function getProducts()
+    {
+        return response()->json([
+            'data' => Product::where('client_id', auth()->user()->client->id)->get(),
+        ]);
+    }
+
+    public function destroy(Product $product)
+    {
+        $product->delete();
+
+        return to_route('client.products.index')->with('success', 'Product deleted successfully');
     }
 }

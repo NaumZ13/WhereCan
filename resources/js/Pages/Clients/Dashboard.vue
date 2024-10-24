@@ -98,9 +98,9 @@ const viewsData = {
                 <Link :href="route('client.products.create')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Create New Product
                 </Link>
-                <a href="/products" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                <Link :href="route('client.products.index')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                     Manage Products
-                </a>
+                </Link>
             </div>
         </div>
     </AppLayout>

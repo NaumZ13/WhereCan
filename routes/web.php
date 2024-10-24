@@ -35,6 +35,11 @@ Route::middleware([
 Route::middleware(['auth','client'])->prefix('client')->group(function () {
     Route::get('/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
 
-    Route::get('/client/products/create', [ClientProductsController::class, 'create'])->name('client.products.create')->can('create', Product::class);
-    Route::post('/client/products', [ClientProductsController::class, 'store'])->name('client.products.store');
+    Route::get('/products/getProducts', [ClientProductsController::class, 'getProducts'])->name('client.products.getProducts');
+    Route::get('/products', [ClientProductsController::class, 'index'])->name('client.products.index');
+    Route::get('/products/create', [ClientProductsController::class, 'create'])->name('client.products.create')->can('create', Product::class);
+    Route::post('/products', [ClientProductsController::class, 'store'])->name('client.products.store');
+    Route::get('/products/{product}', [ClientProductsController::class, 'edit'])->name('client.products.edit');
+    Route::put('/products/{product}', [ClientProductsController::class, 'update'])->name('client.products.update');
+    Route::delete('/products/{product}', [ClientProductsController::class, 'destroy'])->name('client.products.destroy');
 });
