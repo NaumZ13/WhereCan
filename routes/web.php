@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClientProductsController;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
 use Illuminate\Foundation\Application;
@@ -32,5 +33,8 @@ Route::middleware([
 });
 
 Route::middleware(['auth','client'])->prefix('client')->group(function () {
-    Route::get('/dashboard', [ClientController::class, 'index'])->name('clients.dashboard');
+    Route::get('/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
+
+    Route::get('/client/products/create', [ClientProductsController::class, 'create'])->name('client.products.create')->can('create', Product::class);
+    Route::post('/client/products', [ClientProductsController::class, 'store'])->name('client.products.store');
 });

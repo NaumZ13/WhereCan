@@ -19,7 +19,7 @@
         "vue": "^3.3.13"
     },
     "dependencies": {
-        "chart.js": "^3.9.1",
+        "chart.js": "^2.9.4",
         "vue-chart-3": "^3.1.8"
     }
 }

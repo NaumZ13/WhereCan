@@ -29,7 +29,7 @@ class FortifyServiceProvider extends ServiceProvider
                 $user = User::where('email', $request->email)->first();
 
                 if($user->role_id === Role::ROLE_CLIENT){
-                    return redirect()->route('clients.dashboard');
+                    return redirect()->route('client.dashboard');
                 }
 
                 return redirect()->route('products.index');

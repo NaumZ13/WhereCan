@@ -40,14 +40,14 @@ const logout = () => {
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center" v-if="$page.props.auth.user && $page.props.auth.user.role_id === $page.props.roles.client">
-                                <Link :href="route('clients.dashboard')">
+                                <Link :href="route('client.dashboard')">
                                     <ApplicationMark class="block h-9 w-auto" />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('clients.dashboard')" :active="route().current('clients.dashboard')" v-if="$page.props.auth.user && $page.props.auth.user.role_id === $page.props.roles.client">
+                                <NavLink :href="route('client.dashboard')" :active="route().current('client.dashboard')" v-if="$page.props.auth.user && $page.props.auth.user.role_id === $page.props.roles.client">
                                     Dashboard
                                 </NavLink>
                                 <NavLink :href="route('products.index')" :active="route().current('products.index')">
@@ -95,7 +95,7 @@ const logout = () => {
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': !showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1" v-if="$page.props.auth.user && $page.props.auth.user.role_id === $page.props.roles.client">
-                        <ResponsiveNavLink :href="route('clients.dashboard')" :active="route().current('clients.dashboard')">
+                        <ResponsiveNavLink :href="route('client.dashboard')" :active="route().current('client.dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
                     </div>

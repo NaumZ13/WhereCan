@@ -1,5 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { Link } from '@inertiajs/vue3';
 // import { LineChart, BarChart } from 'vue-chart-3';
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement } from 'chart.js';
 import { computed } from 'vue';
@@ -7,10 +8,12 @@ import { computed } from 'vue';
 // Register Chart.js components globally
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement);
 
-// Dummy data for products statistics
-const totalProducts = 25;
-const publishedProducts = 18;
-const unpublishedProducts = 7;
+const props = defineProps({
+    totalProducts: Number,
+    totalUnpublishedProducts: Number,
+    totalPublishedProducts: Number,
+});
+
 const averageRating = 4.3;
 
 // Dummy data for sales trends (past month)
@@ -63,11 +66,11 @@ const viewsData = {
                 </div>
                 <div class="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between">
                     <h3 class="font-semibold text-lg">Published Products</h3>
-                    <p class="mt-2 text-4xl">{{ publishedProducts }}</p>
+                    <p class="mt-2 text-4xl">{{ totalPublishedProducts }}</p>
                 </div>
                 <div class="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between">
                     <h3 class="font-semibold text-lg">Unpublished Products</h3>
-                    <p class="mt-2 text-4xl">{{ unpublishedProducts }}</p>
+                    <p class="mt-2 text-4xl">{{ totalUnpublishedProducts }}</p>
                 </div>
                 <div class="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between">
                     <h3 class="font-semibold text-lg">Average Rating</h3>
@@ -92,9 +95,9 @@ const viewsData = {
 
             <!-- Actions Section -->
             <div class="flex justify-around w-full mt-10">
-                <a href="/products/create" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <Link :href="route('client.products.create')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Create New Product
-                </a>
+                </Link>
                 <a href="/products" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                     Manage Products
                 </a>

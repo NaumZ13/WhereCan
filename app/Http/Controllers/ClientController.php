@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -12,8 +13,16 @@ class ClientController extends Controller
      */
     public function index()
     {
+        $clientProducts = Product::where('client_id', auth()->user()->client->id)
+            ->selectRaw('COUNT(*) AS productsCount')
+            ->selectRaw('COUNT(CASE WHEN is_published = false THEN 1 END) AS unpublishedProductsCount')
+            ->selectRaw('COUNT(CASE WHEN is_published = true THEN 1 END) AS publishedProductsCount')
+            ->first();
+        
         return inertia('Clients/Dashboard', [
-            'clients' => Client::all(),
+            'totalProducts' => $clientProducts->productsCount,
+            'totalUnpublishedProducts' => $clientProducts->unpublishedProductsCount,
+            'totalPublishedProducts' => $clientProducts->publishedProductsCount,
         ]);
     }
 
