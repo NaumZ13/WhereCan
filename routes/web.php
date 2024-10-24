@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
 use Illuminate\Foundation\Application;
@@ -25,7 +26,12 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    
+    // Route::get('/dashboard', function () {
+    //     return Inertia::render('Clients/Dashboard');
+    // })->name('clients.dashboard');
+});
+
+Route::middleware(['client'])->prefix('client')->group(function () {
+    Route::get('/dashboard', [ClientController::class, 'index'])->name('clients.dashboard');
 });

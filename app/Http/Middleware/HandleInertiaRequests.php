@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -36,7 +37,18 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            //
+            'auth' => [
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'role_id' => $request->user()->role_id,
+                ] : null,
+            ],
+            'roles' => [
+                'admin' => Role::ROLE_ADMIN,
+                'user' => Role::ROLE_USER,
+                'client' => Role::ROLE_CLIENT,
+            ]    
         ]);
     }
 }

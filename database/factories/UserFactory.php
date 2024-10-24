@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Client;
+use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -31,6 +33,7 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'role_id' => Role::inRandomOrder()->first()->id,
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
@@ -48,25 +51,14 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
-
-    /**
-     * Indicate that the user should have a personal team.
-     */
-    public function withPersonalTeam(?callable $callback = null): static
+ 
+    public function configure()
     {
-        if (! Features::hasTeamFeatures()) {
-            return $this->state([]);
-        }
-
-        return $this->has(
-            Team::factory()
-                ->state(fn (array $attributes, User $user) => [
-                    'name' => $user->name.'\'s Team',
-                    'user_id' => $user->id,
-                    'personal_team' => true,
-                ])
-                ->when(is_callable($callback), $callback),
-            'ownedTeams'
-        );
+        return $this->afterCreating(function (User $user) {
+            if ($user->role->name === 'client') {
+                // Create client record for the user
+                Client::factory()->create(['user_id' => $user->id]);
+            }
+        });
     }
 }

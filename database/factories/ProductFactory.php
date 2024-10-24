@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
+            'client_id' => Client::factory(),
             'name' => $this->faker->sentence(2),
             'description' => $this->faker->paragraph(rand(1,10)),
             'price' => $this->faker->randomFloat(2, 1, 1000),

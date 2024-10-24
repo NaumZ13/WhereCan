@@ -12,7 +12,9 @@ class ClientController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Clients/Dashboard', [
+            'clients' => Client::all(),
+        ]);
     }
 
     /**
