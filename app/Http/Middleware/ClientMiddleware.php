@@ -16,10 +16,10 @@ class ClientMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth()->user()->role_id !== Role::ROLE_CLIENT)
-        {
+        if(auth()->user()->role_id !== Role::ROLE_CLIENT){
             return redirect()->route('products.index');
         }
+        
         return $next($request);
     }
 }

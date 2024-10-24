@@ -26,12 +26,11 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    
     // Route::get('/dashboard', function () {
     //     return Inertia::render('Clients/Dashboard');
     // })->name('clients.dashboard');
 });
 
-Route::middleware(['client'])->prefix('client')->group(function () {
+Route::middleware(['auth','client'])->prefix('client')->group(function () {
     Route::get('/dashboard', [ClientController::class, 'index'])->name('clients.dashboard');
 });

@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { LineChart, BarChart } from 'vue-chart-3';
+// import { LineChart, BarChart } from 'vue-chart-3';
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement } from 'chart.js';
 import { computed } from 'vue';
 
@@ -80,13 +80,13 @@ const viewsData = {
                 <!-- Line chart for sales -->
                 <div class="bg-white shadow-md rounded-lg p-6">
                     <h3 class="font-semibold text-lg mb-4">Products Sold (Last Month)</h3>
-                    <LineChart :chart-data="salesData" :options="{ responsive: true, maintainAspectRatio: false }" />
+                    <!-- <LineChart :chart-data="salesData" :options="{ responsive: true, maintainAspectRatio: false }" /> -->
                 </div>
 
                 <!-- Bar chart for product views -->
                 <div class="bg-white shadow-md rounded-lg p-6">
                     <h3 class="font-semibold text-lg mb-4">Top Viewed Products</h3>
-                    <BarChart :chart-data="viewsData" :options="{ responsive: true, maintainAspectRatio: false }" />
+                    <!-- <BarChart :chart-data="viewsData" :options="{ responsive: true, maintainAspectRatio: false }" /> -->
                 </div>
             </div>
 
