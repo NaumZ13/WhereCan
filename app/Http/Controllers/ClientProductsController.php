@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Datatables\ProductsDatatable;
 use App\Http\Requests\Products\StoreRequest;
 use App\Http\Requests\Products\UpdateRequest;
 use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ClientProductsController extends Controller
@@ -52,10 +54,13 @@ class ClientProductsController extends Controller
         return to_route('client.products.index')->with('success', 'Product updated successfully');
     }
 
-    public function getProducts()
+    public function getProducts(): JsonResponse
     {
+        $datatable = new ProductsDatatable();
+        
         return response()->json([
-            'data' => Product::where('client_id', auth()->user()->client->id)->get(),
+            'data' => $datatable->getData(),
+            'columns' => $datatable->getColumns(),
         ]);
     }
 
