@@ -42,7 +42,7 @@
 
                 <!-- Reviews List -->
                 <div class="space-y-6">
-                    <div class="p-6 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
+                    <div class="p-6 bg-gray-100 rounded-lg shadow-md">
                         <div class="flex items-center justify-between mb-2">
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">John Doe</h3>
                             <div class="flex items-center text-yellow-400">

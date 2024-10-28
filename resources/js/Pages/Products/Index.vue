@@ -9,7 +9,7 @@
         <div class="flex flex-col min-h-screen">
             <div class="flex flex-grow">
                 <!-- Sidebar for Filters -->
-            <aside class="w-1/5 p-4 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-md">
+            <aside class="w-1/5 p-4 bg-gray-100 bg-gray-600 rounded-lg shadow-md">
                 <!-- Search Input -->
                 <div class="mb-4">
                     <InputLabel for="search" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Search</InputLabel>
@@ -18,13 +18,13 @@
                         @input="() => fetchProducts(1, true)"
                         type="text"
                         id="search"
-                        class="w-full p-2 border border-gray-300 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+                        class="w-full p-2 border border-gray-300 rounded-lg shadow-sm dark:border-gray-600 dark:text-white"
                         placeholder="Search products..." />
                 </div>
                 <!-- Dropdown Filters -->
                 <div class="mb-4">
                     <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
-                    <select id="category" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+                    <select id="category" class="w-full p-2 border border-gray-300 rounded-lg dark:border-gray-600 dark:text-white">
                         <option>All</option>
                         <option>Electronics</option>
                         <option>Fashion</option>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="priceRange" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price Range</label>
-                    <select id="priceRange" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+                    <select id="priceRange" class="w-full p-2 border border-gray-300 rounded-lg dark:border-gray-600 dark:text-white">
                         <option>All</option>
                         <option>$0 - $50</option>
                         <option>$50 - $100</option>
@@ -62,7 +62,7 @@
             <div class="w-3/4 pl-20">
                 <div class="flex flex-wrap -mx-4">
                     <div class="p-4 w-full md:w-1/2 lg:w-1/3" v-for="product in props.products.data" :key="product.id">
-                        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-full">
+                        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow bg-gray-600 dark:border-gray-700 h-full">
                             <a href="#">
                                 <img class="rounded-t-lg" :src="product.image" alt="Product Image" />
                             </a>
