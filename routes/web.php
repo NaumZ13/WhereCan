@@ -42,4 +42,6 @@ Route::middleware(['auth','client'])->prefix('client')->group(function () {
     Route::get('/products/{product}', [ClientProductsController::class, 'edit'])->name('client.products.edit');
     Route::put('/products/{product}', [ClientProductsController::class, 'update'])->name('client.products.update');
     Route::delete('/products/{product}', [ClientProductsController::class, 'destroy'])->name('client.products.destroy');
+    Route::put('/products/{product}/unpublish', [ClientProductsController::class, 'unpublish'])->name('client.products.unpublish');
+    Route::put('/products/{product}/publish', [ClientProductsController::class, 'publish'])->name('client.products.publish');
 });

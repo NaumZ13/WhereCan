@@ -10,14 +10,12 @@ class ProductsDatatable {
     public function getData()
     {
         $client = auth()->user()->client;
-        $isPublished = true;
+        $isPublished = request()->filled('filters.showUnpublished') ? request('filters.showUnpublished') !== 'true' : true;
 
-        if(request()->has('filters.showUnpublished') && request('filters.showUnpublished') === 'true') {
-           $isPublished = false;
-        } 
-        
-        $query = Product::select('id', 'name', 'price', 'created_at')->where('client_id', $client->id)->where('is_published', $isPublished);
-        
+        $query = Product::select('id', 'name', 'price', 'created_at')
+            ->where('client_id', $client->id)
+            ->where('is_published', $isPublished);
+            
         if(request()->has('filters.search') && request('filters.search') != '') {
             $query->where('name', 'like', '%' . request('filters.search') . '%');
         }

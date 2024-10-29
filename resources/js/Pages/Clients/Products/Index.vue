@@ -40,6 +40,8 @@
                             :href="route('client.products.edit', row.id)"
                             class="text-white mr-5 bg-green-700 pt-1 pb-1 pl-3 pr-3 rounded"
                         >Edit</Link>
+                        <button @click="unpublishProduct(row.id)"  v-if="!appliedFilters.showUnpublished"  class="text-red-500 mr-5">Unpublish</button>
+                        <button @click="publishProduct(row.id)" v-if="appliedFilters.showUnpublished"  class="text-red-500 mr-5">Publish</button>
                         <button @click="deleteProduct(row.id)" class="text-red-500">Delete</button>
                     </template>
                 </Datatable>
@@ -63,6 +65,9 @@ const filters = reactive({
     search: "",
     showUnpublished: false,
 });
+const appliedFilters = reactive({
+    showUnpublished: false,
+});
 
 onMounted(() => {
     fetchProducts();
@@ -73,7 +78,7 @@ const fetchProducts = async (page = 1) => {
         const response = await axios.get("/client/products/getProducts", {
             params: {
                 page,
-                filters: filters
+                filters
             }
         });
         columns.value = response.data.columns;
@@ -82,22 +87,47 @@ const fetchProducts = async (page = 1) => {
             currentPage: response.data.data.current_page,
             lastPage: response.data.data.last_page,
         };
+        appliedFilters.showUnpublished = filters.showUnpublished;
     } catch (error) {
-        console.error("Error fetching products:", error);
+        Swal.fire("Error fetching products", error.message, "error");
     }
 };
 
-const deleteProduct = (id) => {
-    Swal.fire({
-        title: 'Are you sure you want to delete this product?',
+const unpublishProduct = async (id) => {
+    try {
+        router.put(route("client.products.unpublish", id));
+        Swal.fire("Product unpublished successfully", "", "success");
+        fetchProducts();
+    } catch (error) {
+        Swal.fire("Error", "Unable to unpublish product", "error");
+    }
+};
+
+const publishProduct = async (id) => {
+    try {
+        router.put(route("client.products.publish", id));
+        Swal.fire("Product published successfully", "", "success");
+        fetchProducts();
+    } catch (error) {
+        Swal.fire("Error", "Unable to publish product", "error");
+    }
+};
+
+const deleteProduct = async (id) => {
+    const result = await Swal.fire({
+        title: "Are you sure you want to delete this product?",
         showDenyButton: true,
-        confirmButtonText: `Delete`,
-        denyButtonText: `Cancel`,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            router.delete(route('client.products.destroy', id));
-            fetchProducts();
-        }
+        confirmButtonText: "Delete",
+        denyButtonText: "Cancel",
     });
+
+    if (result.isConfirmed) {
+        try {
+            router.delete(route("client.products.destroy", id));
+            fetchProducts();
+        } catch (error) {
+            Swal.fire("Error", "Unable to delete product", "error");
+        }
+    }
 };
 </script>

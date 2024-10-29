@@ -68,6 +68,20 @@ class ClientProductsController extends Controller
     {
         $product->delete();
 
-        return to_route('client.products.index')->with('success', 'Product deleted successfully');
+        return back()->with('success', 'Product unpublished successfully');
+    }
+
+    public function unpublish(Product $product)
+    {
+        $product->update(['is_published' => false]);
+
+        return back()->with('success', 'Product unpublished successfully');
+    }
+
+    public function publish(Product $product)
+    {
+        $product->update(['is_published' => true]);
+
+        return back()->with('success', 'Product published successfully');
     }
 }
