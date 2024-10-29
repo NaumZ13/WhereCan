@@ -41,7 +41,7 @@
                             :href="route('client.products.edit', row.id)"
                             class="text-white mr-5 bg-green-700 pt-1 pb-1 pl-3 pr-3 rounded"
                         ><i class="fa-solid fa-pen-to-square"></i></Link>
-                        <button @click="deleteProduct(row.id)" class="text-red-500"><i class="fa-solid fa-trash mr-5"></i></button>
+                        <button title="Delete Product" @click="deleteProduct(row.id)" class="text-red-500"><i class="fa-solid fa-trash mr-5"></i></button>
                         <button title="Unpublish Product" @click="unpublishProduct(row.id)"  v-if="!appliedFilters.showUnpublished"  class="text-red-500"><i class="fa-solid fa-x"></i></button>
                         <button title="Publish Product" @click="publishProduct(row.id)" v-if="appliedFilters.showUnpublished"  class="text-red-500"><i class="fa-solid fa-check"></i></button>
                     </template>

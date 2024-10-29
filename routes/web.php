@@ -11,9 +11,8 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
+        'canRegisterClient' => Route::has('client.register'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
     ]);
 });
 
@@ -45,3 +44,5 @@ Route::middleware(['auth','client'])->prefix('client')->group(function () {
     Route::put('/products/{product}/unpublish', [ClientProductsController::class, 'unpublish'])->name('client.products.unpublish');
     Route::put('/products/{product}/publish', [ClientProductsController::class, 'publish'])->name('client.products.publish');
 });
+
+require __DIR__.'/fortify.php';

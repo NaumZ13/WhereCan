@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Client;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 
-class CreateNewUser implements CreatesNewUsers
+class CreateNewClient implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
@@ -27,11 +28,17 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
-            'role_id' => Role::ROLE_USER,
+            'role_id' => Role::ROLE_CLIENT,
             'password' => Hash::make($input['password']),
         ]);
+
+        Client::create([
+            'user_id' => $user->id,
+        ]);
+
+        return $user;
     }
 }

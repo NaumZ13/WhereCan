@@ -35,6 +35,8 @@ class FortifyServiceProvider extends ServiceProvider
                 return redirect()->route('products.index');
             }
         });
+
+        Fortify::ignoreRoutes();
     }
 
     /**
