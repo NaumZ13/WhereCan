@@ -1,14 +1,5 @@
 <template>
-  <div class="datatable container mx-auto p-6 bg-white shadow rounded-lg mt-10 mb-10">
-    <div class="mb-4">
-      <input
-        type="text"
-        v-model="search"
-        placeholder="Search products..."
-        class="w-full p-2 border border-gray-300 rounded-md"
-      />
-    </div>
-
+  <div class="datatable container mx-auto p-6 bg-white shadow rounded-lg mb-10">
     <div class="overflow-x-auto">
       <table :key="tableKey" class="table-auto w-full text-left bg-gray-100 rounded-lg">
         <thead class="bg-gray-200">
@@ -31,6 +22,25 @@
           </tr>
         </tbody>
       </table>
+      <div class="pagination mt-4 flex justify-center space-x-2">
+          <button 
+            @click="$emit('changePage', pagination.currentPage - 1)" 
+            :disabled="pagination.currentPage === 1"
+            class="px-3 py-1 bg-gray-200 rounded-md"
+          >
+            Previous
+          </button>
+          
+          <span>Page {{ pagination.currentPage }} of {{ pagination.lastPage }}</span>
+          
+          <button 
+            @click="$emit('changePage', pagination.currentPage + 1)" 
+            :disabled="pagination.currentPage === pagination.lastPage"
+            class="px-3 py-1 bg-gray-200 rounded-md"
+          >
+            Next
+          </button>
+      </div>
     </div>
   </div>
 </template>
@@ -47,21 +57,16 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  pagination: {
+    type: Object,
+    default: () => ({
+      currentPage: 1,
+      lastPage: 1,
+    }),
+  },
 });
-
-const search = ref('');
-const sortBy = ref('');
-const sortDirection = ref('asc');
 const tableKey = ref(0);
 
-const sortTable = (column) => {
-  if (sortBy.value === column) {
-    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
-  } else {
-    sortBy.value = column;
-    sortDirection.value = 'asc';
-  }
-};
 </script>
 
 <style scoped>

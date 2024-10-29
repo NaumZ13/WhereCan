@@ -40,6 +40,6 @@ class DatabaseSeeder extends Seeder
             'role_id' => Role::where('name', 'client')->first()->id,
         ]);
 
-        Product::factory(10)->create(['client_id' => $client->client->id]);
+        Product::factory(100)->create(['client_id' => $client->client->id]);
     }
 }

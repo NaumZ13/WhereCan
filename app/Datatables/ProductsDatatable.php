@@ -7,10 +7,22 @@ use Illuminate\Support\Collection;
 
 class ProductsDatatable {
 
-    public function getData(): Collection
+    public function getData()
     {
         $client = auth()->user()->client;
-        return Product::select('id', 'name', 'price', 'created_at')->where('client_id', $client->id)->get();
+        $isPublished = true;
+
+        if(request()->has('filters.showUnpublished') && request('filters.showUnpublished') === 'true') {
+           $isPublished = false;
+        } 
+        
+        $query = Product::select('id', 'name', 'price', 'created_at')->where('client_id', $client->id)->where('is_published', $isPublished);
+        
+        if(request()->has('filters.search') && request('filters.search') != '') {
+            $query->where('name', 'like', '%' . request('filters.search') . '%');
+        }
+
+        return $query->paginate(10);
     }
 
     public function getColumns(): array
