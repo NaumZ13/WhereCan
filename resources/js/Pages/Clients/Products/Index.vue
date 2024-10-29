@@ -96,6 +96,7 @@ const deleteProduct = (id) => {
     }).then((result) => {
         if (result.isConfirmed) {
             router.delete(route('client.products.destroy', id));
+            fetchProducts();
         }
     });
 };
