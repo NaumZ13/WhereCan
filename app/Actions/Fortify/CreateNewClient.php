@@ -2,10 +2,12 @@
 
 namespace App\Actions\Fortify;
 
+use App\Mail\WelcomeClientMail;
 use App\Models\Client;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
@@ -35,9 +37,11 @@ class CreateNewClient implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
 
-        Client::create([
+        $client = Client::create([
             'user_id' => $user->id,
         ]);
+
+        Mail::to($user->email)->send(new WelcomeClientMail($user));
 
         return $user;
     }
