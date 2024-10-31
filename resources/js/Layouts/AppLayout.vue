@@ -34,7 +34,7 @@ const logout = () => {
         <Banner />
 
         <div class="min-h-screen bg-gray-300">
-            <nav class="bg-white bg-gray-600 border-b border-gray-100 dark:border-gray-700">
+            <nav class="bg-gray-500 border-b border-gray-100">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex">
@@ -46,7 +46,7 @@ const logout = () => {
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex text-white">
                                 <NavLink :href="route('client.dashboard')" :active="route().current('client.dashboard')" v-if="$page.props.auth.user && $page.props.auth.user.role_id === $page.props.roles.client">
                                     Dashboard
                                 </NavLink>
@@ -69,7 +69,7 @@ const logout = () => {
                                             <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
                                         </button>
                                     </template>
-                                    <template #content>
+                                    <template #content class="text-black">
                                         <DropdownLink :href="route('profile.show')">Profile</DropdownLink>
                                         <DropdownLink as="button" @click="logout">Log Out</DropdownLink>
                                     </template>
@@ -85,7 +85,7 @@ const logout = () => {
 
                         <!-- Hamburger Menu for Mobile -->
                         <div class="-me-2 flex items-center sm:hidden">
-                            <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out" @click="showingNavigationDropdown = !showingNavigationDropdown">
+                            <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100  focus:text-gray-500  transition duration-150 ease-in-out" @click="showingNavigationDropdown = !showingNavigationDropdown">
                                 <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path :class="{'hidden': showingNavigationDropdown, 'inline-flex': !showingNavigationDropdown }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                                     <path :class="{'hidden': !showingNavigationDropdown, 'inline-flex': showingNavigationDropdown }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -103,10 +103,10 @@ const logout = () => {
                         </ResponsiveNavLink>
                     </div>
                     <!-- Responsive Auth Links -->
-                    <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+                    <div class="pt-4 pb-1 border-t border-gray-200 ">
                         <div v-if="$page.props.auth.user">
                             <div class="px-4">
-                                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ $page.props.auth.user.name }}</div>
+                                <div class="font-medium text-base text-gray-800 ">{{ $page.props.auth.user.name }}</div>
                                 <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
                             </div>
 

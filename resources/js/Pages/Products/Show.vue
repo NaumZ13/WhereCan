@@ -10,8 +10,8 @@
 
                 <!-- Product Info -->
                 <div class="w-full md:w-1/2">
-                    <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">{{ product.name }}</h1>
-                    <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">{{ product.description }}</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ product.name }}</h1>
+                    <p class="text-lg text-gray-700 mb-6">{{ product.description }}</p>
                     
                     <!-- Price -->
                     <div class="text-2xl font-semibold text-blue-600 mb-4">
@@ -27,7 +27,7 @@
 
             <!-- Ratings & Reviews Section -->
             <div class="mt-10">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">User Ratings & Reviews</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">User Ratings & Reviews</h2>
                 
                 <!-- Ratings Overview -->
                 <div class="flex items-center mb-4">
@@ -37,14 +37,14 @@
                             <path d="M12 17.75l-6.42 3.85 1.76-7.35L1.3 9.26l7.46-.61L12 2.5l3.24 6.15 7.46.61-6.04 4.99 1.76 7.35L12 17.75z" />
                         </svg>
                     </div>
-                    <span class="ml-2 text-lg text-gray-700 dark:text-gray-300">{{ product.rating }} / 5</span>
+                    <span class="ml-2 text-lg text-gray-700">{{ product.rating }} / 5</span>
                 </div>
 
                 <!-- Reviews List -->
                 <div class="space-y-6">
                     <div class="p-6 bg-gray-100 rounded-lg shadow-md">
                         <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">John Doe</h3>
+                            <h3 class="text-xl font-semibold text-gray-900">John Doe</h3>
                             <div class="flex items-center text-yellow-400">
                                 <!-- Star Ratings -->
                                 <svg v-for="n in 5" :key="n" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 inline-block">
@@ -52,7 +52,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <p class="text-gray-700 dark:text-gray-300">Repellat deleniti debitis nisi aut itaque esse. Autem aut et a</p>
+                        <p class="text-gray-700">Repellat deleniti debitis nisi aut itaque esse. Autem aut et a</p>
                     </div>
                 </div>
             </div>
