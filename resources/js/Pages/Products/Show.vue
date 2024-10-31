@@ -40,19 +40,42 @@
                     <span class="ml-2 text-lg text-gray-700">{{ product.rating }} / 5</span>
                 </div>
 
+                <form v-if="$page.props.auth.user">
+                    <div class="mb-4 flex justify-end">
+                        <PrimaryButton @click="showReviewArea()" type="button" :class="showReview ? 'bg-red-500' : 'bg-blue-500'" v-text="showReview ? 'Cancel' : 'Add Review'"></PrimaryButton>
+                        <PrimaryButton @click="saveReview()" :disabled="form.processing" type="submit" v-if="showReview" class="bg-green-600 ml-3">Save</PrimaryButton>
+                    </div>
+                    <div v-if="showReview">
+                        <textarea v-model="newReview" class="w-full p-4 border border-gray-300 rounded-lg shadow-md" rows="4" placeholder="Write your review here"></textarea>
+                        <InputError :message="form.errors.review" class="mb-2" />
+                    </div>
+                </form>
+
                 <!-- Reviews List -->
-                <div class="space-y-6">
+                <div class="space-y-6 mb-2" v-for="review in reviews.data" :key="review.id">
                     <div class="p-6 bg-gray-100 rounded-lg shadow-md">
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-xl font-semibold text-gray-900">John Doe</h3>
-                            <div class="flex items-center text-yellow-400">
-                                <!-- Star Ratings -->
-                                <svg v-for="n in 5" :key="n" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 inline-block">
-                                    <path d="M12 17.75l-6.42 3.85 1.76-7.35L1.3 9.26l7.46-.61L12 2.5l3.24 6.15 7.46.61-6.04 4.99 1.76 7.35L12 17.75z" />
-                                </svg>
+                        <div v-if="review.canBeEditedOrDeleted">
+                            <div class="flex items-center justify-end">
+                                <button @click="deleteReview(review.id)" v-if="review.can?.delete" type="button"><i class="fa-solid fa-trash"></i></button>
+                                <button @click="editReview(review)" v-if="review.can?.update" type="button" class="ml-2"><i class="fa-solid fa-pen-to-square"></i></button>
                             </div>
                         </div>
-                        <p class="text-gray-700">Repellat deleniti debitis nisi aut itaque esse. Autem aut et a</p>
+                        
+                        <div v-if="editMode === review.id && review.canBeEditedOrDeleted">
+                            <textarea v-model="form.review" class="w-full p-4 border border-gray-300 rounded-lg shadow-md" rows="4"></textarea>
+                            <InputError :message="form.errors.review" class="mb-2" />
+                            <div class="flex justify-end mt-2">
+                                <PrimaryButton @click="saveEdit(review.id)" type="button" class="bg-green-600 mr-2">Save</PrimaryButton>
+                                <PrimaryButton @click="cancelEdit()" type="button" class="bg-gray-400">Cancel</PrimaryButton>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <p class="text-gray-700">{{ review.review }}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold text-gray-900">{{ review.user.name }}</span>
+                            <span class="text-sm font-semibold text-gray-900">{{ new Date(review.created_at).toLocaleDateString() }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -61,17 +84,86 @@
 </template>
 
 <script setup>
+import InputError from '@/Components/InputError.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { useForm } from '@inertiajs/vue3';
+import { defineProps, ref } from 'vue';
+import Swal from 'sweetalert2';
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
-    product: {
-        type: Object,
-    },
+    product: Object,
+    reviews: Object,
 });
+
+const showReview = ref(false);
+const editMode = ref(null);
+const originalReview = ref('');
+const newReview = ref('');  // Separate variable for adding new reviews
+
+const form = useForm({
+    review: '',
+});
+
+const showReviewArea = () => {
+    showReview.value = !showReview.value;
+    newReview.value = ''; // Clear new review input when toggling
+}
+
+const saveReview = () => {
+    form.review = newReview.value; // Use newReview for saving a new review
+    form.post(route('review.store', { product: props.product.id }), {
+        onSuccess: () => {
+            showReview.value = false;
+            newReview.value = ''; // Reset new review field after saving
+        },
+        preserveScroll: true,
+    });
+};
+
+const editReview = (review) => {
+    editMode.value = review.id;
+    originalReview.value = review.review;
+    form.review = review.review;
+};
+
+const saveEdit = (id) => {
+    form.put(route('review.update', id), {
+        onSuccess: () => {
+            editMode.value = null;
+            form.reset();
+        },
+        preserveScroll: true,
+    });
+};
+
+const cancelEdit = () => {
+    form.review = originalReview.value; // Reset to original value
+    editMode.value = null;
+};
+
+const deleteReview = async (id) => {
+    const result = await Swal.fire({
+        title: "Are you sure you want to delete this review?",
+        showDenyButton: true,
+        confirmButtonText: "Yes",
+        denyButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
+        try {
+            router.delete(route("review.destroy", id), {
+                preserveScroll: true,
+            });
+        } catch (error) {
+            Swal.fire("Error", "Unable to delete review", "error");
+        }
+    }
+};
 
 // Function to handle adding the product to the cart
 const addToCart = (productId) => {
-    // You can implement the logic to add the product to the cart here
     console.log(`Adding product with ID ${productId} to cart`);
 };
 </script>

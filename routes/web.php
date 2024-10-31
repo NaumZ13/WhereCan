@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientProductsController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Models\Product;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,10 @@ Route::middleware([
     // Route::get('/dashboard', function () {
     //     return Inertia::render('Clients/Dashboard');
     // })->name('clients.dashboard');
+
+    Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('review.store');
+    Route::put('/products/reviews/{review}', [ReviewController::class, 'update'])->name('review.update');
+    Route::delete('/products/reviews/{review}', [ReviewController::class, 'destroy'])->name('review.destroy');
 });
 
 Route::middleware(['auth','client'])->prefix('client')->group(function () {
@@ -44,5 +49,6 @@ Route::middleware(['auth','client'])->prefix('client')->group(function () {
     Route::put('/products/{product}/unpublish', [ClientProductsController::class, 'unpublish'])->name('client.products.unpublish');
     Route::put('/products/{product}/publish', [ClientProductsController::class, 'publish'])->name('client.products.publish');
 });
+
 
 require __DIR__.'/fortify.php';
