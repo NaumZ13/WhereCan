@@ -26,4 +26,9 @@ class Review extends Model
         $timeLimit = now()->subHours(2);
         return $this->created_at >= $timeLimit;
     }
+
+    public function likes()
+    {
+        return $this->morphMany(Like::class, 'likeable');
+    }
 }

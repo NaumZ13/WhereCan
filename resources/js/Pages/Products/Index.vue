@@ -121,6 +121,8 @@ const truncateDescription = (description, maxLength) => {
 };
 
 const fetchProducts = async (page = 1, isSearch = false) => {
+
+    // maybe use debounce?
     if (isSearch) {
         page = 1; 
     }

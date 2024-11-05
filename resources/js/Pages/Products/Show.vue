@@ -61,6 +61,8 @@
                             </div>
                         </div>
                         
+                        
+
                         <div v-if="editMode === review.id && review.canBeEditedOrDeleted">
                             <textarea v-model="form.review" class="w-full p-4 border border-gray-300 rounded-lg shadow-md" rows="4"></textarea>
                             <InputError :message="form.errors.review" class="mb-2" />
@@ -72,9 +74,23 @@
                         <div v-else>
                             <p class="text-gray-700">{{ review.review }}</p>
                         </div>
-                        <div class="flex justify-between items-center">
+                        <div class="mt-2 flex justify-between items-center">
                             <span class="text-sm font-semibold text-gray-900">{{ review.user.name }}</span>
                             <span class="text-sm font-semibold text-gray-900">{{ new Date(review.created_at).toLocaleDateString() }}</span>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <span class="text-pink-500 mt-2">{{ review.likes_count }} likes</span>
+                
+                            <div v-if="$page.props.auth.user">
+                                <button v-if="review.can.like" @click="onLike(review)" type="button" class="inline-block mr-2 bg-indigo-600 hover:bg-pink-500 transition-colors text-white py-1.5 px-3 rounded-full">
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                    Like Review
+                                </button>
+                                <button v-else @click="onUnlike(review.id)" type="button" class="inline-block bg-indigo-600 hover:bg-pink-500 transition-colors text-white py-1.5 px-3 rounded-full">
+                                    <i class="fa-solid fa-thumbs-down"></i>
+                                    Unlike Review
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,7 +103,7 @@
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { useForm } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
 import Swal from 'sweetalert2';
 import { router } from "@inertiajs/vue3";
@@ -160,6 +176,32 @@ const deleteReview = async (id) => {
             Swal.fire("Error", "Unable to delete review", "error");
         }
     }
+};
+
+const onLike = (review) => {
+    // Update the likes count immediately in the frontend
+    review.likes_count++;
+    review.can.like = false;
+
+    // Send request without reloading or displaying a loading bar
+    router.post(route('likes.store', ['review', review.id]), {}, {
+        only: ['reviews'], // Only get the updated reviews data if necessary
+        preserveScroll: true,
+        onSuccess: () => {
+            // Optionally do something on success, like showing a small notification
+        },
+        onError: () => {
+            // Roll back in case of error
+            review.likes_count--;
+            review.can.like = true;
+        }
+    });
+};
+
+const onUnlike = (id) => {
+    router.delete(route('likes.destroy', ['review', id]), {
+        preserveScroll: true,
+    })
 };
 
 // Function to handle adding the product to the cart

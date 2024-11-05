@@ -23,6 +23,7 @@ class ReviewFactory extends Factory
             'user_id' => User::factory(),
             'review' => fake()->paragraph,
             'rating' => fake()->numberBetween(1, 5),
+            'likes_count' => 0,
         ];
     }
 }

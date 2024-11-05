@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientProductsController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Models\Product;
@@ -34,6 +35,9 @@ Route::middleware([
     Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('review.store');
     Route::put('/products/reviews/{review}', [ReviewController::class, 'update'])->name('review.update');
     Route::delete('/products/reviews/{review}', [ReviewController::class, 'destroy'])->name('review.destroy');
+
+    Route::post('/likes/{type}/{id}', [LikeController::class, 'store'])->name('likes.store');
+    Route::delete('/likes/{type}/{id}', [LikeController::class, 'destroy'])->name('likes.destroy');
 });
 
 Route::middleware(['auth','client'])->prefix('client')->group(function () {
