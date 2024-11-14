@@ -17,14 +17,14 @@
                     >
                     <TextInput
                         v-model="search"
-                        @input="() => fetchProducts(1, true)"
+                        @input="resetAndFetchProducts"
                         type="text"
                         id="search"
                         class="w-full p-2 border border-gray-300 rounded-lg"
                         placeholder="Search products..."
                     />
                 </div>
-
+                <!-- Other filter fields here -->
                 <div class="mb-4">
                     <label
                         for="category"
@@ -142,11 +142,7 @@
                         </Link>
                     </div>
                 </div>
-                <Pagination
-                    :meta="props.products.meta"
-                    @pagination-change-page="onSearchProducts"
-                    class="mt-4"
-                />
+                <div ref="loadMoreTrigger" class="mt-4"></div>
             </main>
         </div>
     </AppLayout>
@@ -157,15 +153,13 @@ import { Head, Link } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { ref, watch  } from "vue";
-import Pagination from "@/Components/Pagination.vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import axios from "axios";
 
-const props = defineProps({
-    products: {
-        type: Object,
-    },
-});
+const products = ref([]);
 const search = ref("");
+const page = ref(1);
+const loading = ref(false);
 
 const truncateDescription = (description, maxLength) => {
     return description.length > maxLength
@@ -173,24 +167,61 @@ const truncateDescription = (description, maxLength) => {
         : description;
 };
 
-const products = ref(props.products.data);
-const meta = ref(props.products.meta);
+// Fetch initial products and reset pagination when search is changed
+const resetAndFetchProducts = () => {
+    page.value = 1;
+    products.value = [];
+    fetchProducts();
+};
 
-const fetchProducts = async (page = 1) => {
+const fetchProducts = async () => {
+    if (loading.value) return;
+    loading.value = true;
+
     try {
         const response = await axios.get("/search-products", {
             params: {
                 search: search.value,
-                page: page,
+                page: page.value,
             },
         });
-        console.log(response.data.products)
-        products.value = response.data.products;
-        meta.value = response.data.meta;
+        products.value = [...products.value, ...response.data.products];
+        page.value += 1;
     } catch (error) {
         console.error(error);
+    } finally {
+        loading.value = false;
     }
 };
 
-watch(search, () => fetchProducts(1), { debounce: 300 });
+// Intersection Observer to load more products when reaching the trigger div
+const loadMoreTrigger = ref(null);
+let observer;
+
+const createObserver = () => {
+    observer = new IntersectionObserver(
+        (entries) => {
+            const [entry] = entries;
+            if (entry.isIntersecting && !loading.value) {
+                fetchProducts();
+            }
+        },
+        { threshold: 1.0 }
+    );
+
+    if (loadMoreTrigger.value) {
+        observer.observe(loadMoreTrigger.value);
+    }
+};
+
+onMounted(() => {
+    fetchProducts(); // Initial fetch
+    createObserver();
+});
+
+onBeforeUnmount(() => {
+    if (observer && loadMoreTrigger.value) {
+        observer.unobserve(loadMoreTrigger.value);
+    }
+});
 </script>

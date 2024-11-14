@@ -32,11 +32,11 @@ class ProductController extends Controller
             return response()->json([
                 'products' => ProductResource::collection($products),
                 'meta' => [
-                    'links' => $products->links(),
+                    // 'links' => $products->links(),
                     'current_page' => $products->currentPage(),
                     'last_page' => $products->lastPage(),
                     'total' => $products->total(),
-                    'per_page' => $products->perPage(),
+                    // 'per_page' => $products->perPage(),
                 ]
             ]);
     }
