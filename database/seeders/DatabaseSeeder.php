@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use App\Models\Reply;
 use App\Models\Review;
 use App\Models\Role;
 use App\Models\User;
@@ -25,7 +26,17 @@ class DatabaseSeeder extends Seeder
         $clients = User::factory(10)->create(['role_id' => $clientRole->id]);
         $users = User::factory(10)->create(['role_id' => Role::where('name', 'user')->first()->id]);
 
-        Product::factory(100)->recycle($clients->pluck('client'))->has(Review::factory(15)->recycle($users))->create();
+        Product::factory(100)
+            ->recycle($clients->pluck('client'))
+            ->has(
+                Review::factory(15)->recycle($users)->has(
+                    Reply::factory(3)->state(function(array $attributes, Review $review) use ($users) {
+                        return [
+                            'user_id' => $users->random()->id,
+                            'review_id' => $review->id,
+                        ];
+                    })
+                ))->create();
         
         User::factory()->create([
             'name' => 'Naum Zdravkov',

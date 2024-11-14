@@ -5,26 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Review extends Model
+class Reply extends Model
 {
     use HasFactory;
-
-    protected $guarded = ['id'];
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function canBeEditedOrDeleted()
+    public function review()
     {
-        $timeLimit = now()->subHours(2);
-        return $this->created_at >= $timeLimit;
+       return $this->belongsTo(Review::class);
     }
 
     public function likes()
@@ -32,8 +24,9 @@ class Review extends Model
         return $this->morphMany(Like::class, 'likeable');
     }
 
-    public function replies()
+    public function canBeEditedOrDeleted()
     {
-        return $this->hasMany(Reply::class);
+        $timeLimit = now()->subHours(2);
+        return $this->created_at >= $timeLimit;
     }
 }

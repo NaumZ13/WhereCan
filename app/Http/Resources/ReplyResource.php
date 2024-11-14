@@ -6,7 +6,7 @@ use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReviewResource extends JsonResource
+class ReplyResource extends JsonResource
 {
     private bool $withLikePermission = false;
 
@@ -26,13 +26,12 @@ class ReviewResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'product' => new ProductResource($this->whenLoaded('product')),
+            'review' => new ReviewResource($this->whenLoaded('review')),
             'user' => [
                 'id' => $this->user->id,
                 'name' => $this->whenLoaded('user', fn() => $this->user->name),
             ],
-            'review' => $this->review,
-            'rating' => $this->rating,
+            'reply' => $this->reply,
             'likes_count' => $this->likes_count,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
@@ -42,7 +41,6 @@ class ReviewResource extends JsonResource
                 'like' => $this->when($this->withLikePermission, fn () => $request->user()?->can('create', [Like::class, $this->resource])),
             ],
             'canBeEditedOrDeleted' => $this->canBeEditedOrDeleted(),
-            'replies' => ReplyResource::collection($this->whenLoaded('replies')),
         ];
     }
 }
