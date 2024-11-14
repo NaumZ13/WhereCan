@@ -34,7 +34,7 @@ const logout = () => {
         <Banner />
 
         <div class="min-h-screen bg-gray-300">
-            <nav class="bg-gray-500 border-b border-gray-100">
+            <nav class="bg-purple-900 border-b border-purple-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex">
@@ -129,5 +129,12 @@ const logout = () => {
                 <slot />
             </main>
         </div>
+        <footer>
+            <div class="bg-purple-900 mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <p class="text-center text-sm text-white">
+                    &copy; 2021 Company Name. All rights reserved.
+                </p>
+            </div>
+        </footer>
     </div>
 </template>
