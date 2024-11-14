@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6 bg-gray-100 rounded-lg shadow-md">
+    <div class="p-6 bg-purple-200 rounded-lg shadow-md">
         <div v-if="review.canBeEditedOrDeleted">
             <div class="flex items-center justify-end">
                 <button
@@ -100,7 +100,7 @@
             <div
                 v-for="reply in review.replies"
                 :key="reply.id"
-                class="p-3 bg-gray-50 rounded-lg shadow-sm"
+                class="p-3 bg-purple-100 rounded-lg shadow-sm"
             >
                 <div class="flex justify-between">
                     <span class="text-xs font-semibold text-gray-800">{{

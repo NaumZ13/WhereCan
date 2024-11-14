@@ -33,7 +33,7 @@ const logout = () => {
 
         <Banner />
 
-        <div class="min-h-screen bg-gray-300">
+        <div class="min-h-screen bg-indigo-200">
             <nav class="bg-purple-900 border-b border-purple-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
