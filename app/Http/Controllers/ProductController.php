@@ -23,22 +23,20 @@ class ProductController extends Controller
         ]);
     }
 
-    public function search(Request $request)
+    public function fetchFilteredProducts(Request $request)
     {
         $products = Product::filter($request->only('search'))
             ->paginate(12)
             ->appends($request->all());
 
-            return response()->json([
-                'products' => ProductResource::collection($products),
-                'meta' => [
-                    // 'links' => $products->links(),
-                    'current_page' => $products->currentPage(),
-                    'last_page' => $products->lastPage(),
-                    'total' => $products->total(),
-                    // 'per_page' => $products->perPage(),
-                ]
-            ]);
+        return response()->json([
+            'products' => ProductResource::collection($products),
+            'meta' => [
+                'current_page' => $products->currentPage(),
+                'last_page' => $products->lastPage(),
+                'total' => $products->total(),
+            ],
+        ]);
     }
 
     /**
@@ -49,10 +47,10 @@ class ProductController extends Controller
         $reviews = ReviewResource::collection(
             $product->reviews()->with(['user', 'replies.user'])->latest()->paginate(10)
         );
-        $reviews->collection->transform(fn ($resource) => $resource->withLikePermission());
+        $reviews->collection->transform(fn($resource) => $resource->withLikePermission());
 
         return inertia('Products/Show', [
-            'product' => fn () => ProductResource::make($product),
+            'product' => fn() => ProductResource::make($product),
             'reviews' => $reviews,
         ]);
     }

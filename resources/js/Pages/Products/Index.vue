@@ -13,10 +13,11 @@
                     <InputLabel
                         for="search"
                         class="block mb-2 text-sm font-medium text-gray-900"
-                        >Search</InputLabel
                     >
+                        Search
+                    </InputLabel>
                     <TextInput
-                        v-model="search"
+                        v-model="filters.search"
                         @input="resetAndFetchProducts"
                         type="text"
                         id="search"
@@ -24,24 +25,26 @@
                         placeholder="Search products..."
                     />
                 </div>
-                <!-- Other filter fields here -->
+                <!-- Other filter fields -->
                 <div class="mb-4">
                     <label
                         for="category"
                         class="block mb-2 text-sm font-medium text-gray-900"
-                        >Category</label
                     >
+                        Category
+                    </label>
                     <select
                         id="category"
+                        v-model="filters.category"
+                        @change="resetAndFetchProducts"
                         class="w-full p-2 border border-gray-300 rounded-lg"
                     >
-                        <option>All</option>
-                        <option>Electronics</option>
-                        <option>Fashion</option>
-                        <option>Home</option>
+                        <option value="">All</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="home">Home</option>
                     </select>
                 </div>
-
                 <div class="mb-4">
                     <label
                         for="priceRange"
@@ -92,21 +95,17 @@
                         :key="product.id"
                         class="bg-purple-100 border rounded-lg shadow-md w-full sm:w-1/2 md:w-1/4 lg:w-1/5 p-5 transform transition-transform duration-300 ease-in-out hover:scale-105 hover:rotate-2 hover:shadow-lg"
                     >
-                        <a href="#">
-                            <img
-                                class="rounded-t-lg w-full h-48 object-cover"
-                                :src="product.image"
-                                alt="Product Image"
-                            />
-                        </a>
+                        <img
+                            class="rounded-t-lg w-full h-48 object-cover"
+                            :src="product.image"
+                            alt="Product Image"
+                        />
                         <div class="mt-4">
-                            <a href="#">
-                                <h5
-                                    class="mb-2 text-lg font-bold tracking-tight text-gray-900"
-                                >
-                                    {{ product.name }}
-                                </h5>
-                            </a>
+                            <h5
+                                class="mb-2 text-lg font-bold tracking-tight text-gray-900"
+                            >
+                                {{ product.name }}
+                            </h5>
                             <p class="text-gray-700 text-sm">
                                 {{
                                     truncateDescription(
@@ -124,21 +123,6 @@
                             class="inline-flex items-center mt-3 px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
                         >
                             Read more
-                            <svg
-                                class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 14 10"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                                />
-                            </svg>
                         </Link>
                     </div>
                 </div>
@@ -155,46 +139,52 @@ import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import axios from "axios";
+import debounce from "lodash.debounce";
 
 const products = ref([]);
-const search = ref("");
+const filters = ref({ search: "", category: "" });
 const page = ref(1);
 const loading = ref(false);
+const isLastPage = ref(false);
 
+// Truncate description helper
 const truncateDescription = (description, maxLength) => {
     return description.length > maxLength
         ? description.slice(0, maxLength)
         : description;
 };
 
-// Fetch initial products and reset pagination when search is changed
-const resetAndFetchProducts = () => {
+// Reset filters and fetch products
+const resetAndFetchProducts = debounce(() => {
     page.value = 1;
     products.value = [];
-    fetchProducts();
-};
+    isLastPage.value = false; // Reset last page flag
+    fetchFilteredProducts();
+}, 300);
 
-const fetchProducts = async () => {
-    if (loading.value) return;
+// Fetch products with filters and pagination
+const fetchFilteredProducts = async () => {
+    if (loading.value || isLastPage.value) return;
     loading.value = true;
 
     try {
-        const response = await axios.get("/search-products", {
+        const response = await axios.get("/fetch-products", {
             params: {
-                search: search.value,
+                ...filters.value,
                 page: page.value,
             },
         });
         products.value = [...products.value, ...response.data.products];
         page.value += 1;
+        isLastPage.value = response.data.meta.current_page === response.data.meta.last_page;
     } catch (error) {
-        console.error(error);
+        console.error("Error fetching products:", error);
     } finally {
         loading.value = false;
     }
 };
 
-// Intersection Observer to load more products when reaching the trigger div
+// Intersection Observer for infinite scroll
 const loadMoreTrigger = ref(null);
 let observer;
 
@@ -203,7 +193,7 @@ const createObserver = () => {
         (entries) => {
             const [entry] = entries;
             if (entry.isIntersecting && !loading.value) {
-                fetchProducts();
+                fetchFilteredProducts();
             }
         },
         { threshold: 1.0 }
@@ -215,7 +205,7 @@ const createObserver = () => {
 };
 
 onMounted(() => {
-    fetchProducts(); // Initial fetch
+    resetAndFetchProducts(); // Initial fetch
     createObserver();
 });
 

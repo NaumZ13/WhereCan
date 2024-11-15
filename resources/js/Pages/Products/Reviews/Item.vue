@@ -151,19 +151,21 @@
             </div>
         </div>
     </div>
+    <div ref="loadMoreReviewsTrigger" class="mt-4"></div>
 </template>
 <script setup>
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { ref } from "vue";
 import Swal from "sweetalert2";
 import { router } from "@inertiajs/vue3";
 import { Link, useForm } from "@inertiajs/vue3";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps(["review"]);
 
 const editMode = ref(null);
 const originalReview = ref("");
+const loadMoreReviewsTrigger = ref(null);
 
 const form = useForm({
     review: "",
@@ -238,5 +240,4 @@ const onUnlike = (id) => {
         preserveScroll: true,
     });
 };
-
 </script>

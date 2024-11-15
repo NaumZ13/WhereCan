@@ -21,7 +21,7 @@ Route::get('/', function () {
 // Route::resource('/products', ProductController::class);
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-Route::get('/search-products', [ProductController::class, 'search'])->name('products.search');
+Route::get('/fetch-products', [ProductController::class, 'fetchFilteredProducts'])->name('products.search');
 
 Route::middleware([
     'auth:sanctum',
