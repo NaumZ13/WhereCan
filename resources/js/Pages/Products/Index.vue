@@ -88,7 +88,7 @@
             </aside>
 
             <!-- Main Product Section -->
-            <main class="w-4/5 p-2 bg-indigo-200 overflow-auto">
+            <main class="w-4/5 p-2 bg-indigo-200 overflow-auto mt-5">
                 <div class="flex flex-wrap justify-around gap-4">
                     <div
                         v-for="(product, index) in products"

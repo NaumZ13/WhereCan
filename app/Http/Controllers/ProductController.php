@@ -26,7 +26,7 @@ class ProductController extends Controller
     public function fetchFilteredProducts(Request $request)
     {
         $products = Product::filter($request->only('search'))
-            ->paginate(12)
+            ->paginate(20)
             ->appends($request->all());
 
         return response()->json([
