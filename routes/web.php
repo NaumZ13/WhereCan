@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\ClientProductsController;
+use App\Http\Controllers\Clients\ClientCategoriesController;
+use App\Http\Controllers\Clients\ClientController;
+use App\Http\Controllers\Clients\ClientProductsController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
@@ -52,6 +53,12 @@ Route::middleware(['auth','client'])->prefix('client')->group(function () {
     Route::delete('/products/{product}', [ClientProductsController::class, 'destroy'])->name('client.products.destroy');
     Route::put('/products/{product}/unpublish', [ClientProductsController::class, 'unpublish'])->name('client.products.unpublish');
     Route::put('/products/{product}/publish', [ClientProductsController::class, 'publish'])->name('client.products.publish');
+
+    Route::get('/categories', [ClientCategoriesController::class, 'index'])->name('client.categories.index');
+    Route::get('/categories/getCategories', [ClientCategoriesController::class, 'getCategories'])->name('client.categories.getCategories');
+    Route::get('/categories/create', [ClientCategoriesController::class, 'create'])->name('client.categories.create');
+    Route::post('/categories', [ClientCategoriesController::class, 'store'])->name('client.categories.store');
+
 });
 
 

@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
                     )
                 )
         ->create();
-        
+
         User::factory()->create([
             'name' => 'Naum Zdravkov',
             'email' => 'naumz@gmail.com',
@@ -68,6 +68,28 @@ class DatabaseSeeder extends Seeder
             'role_id' => Role::where('name', 'client')->first()->id,
         ]);
 
-        Product::factory(100)->create(['client_id' => $client->client->id]);
+        Product::factory(100)
+        ->state(function () use ($categories) {
+            return [
+                'category_id' => $categories->random()->id,
+            ];
+        })
+        ->has(
+            Review::factory(15)
+                ->state(function () use ($users) {
+                    return [
+                        'user_id' => $users->random()->id,
+                    ];
+                })
+                ->has(
+                    Reply::factory(3)->state(function (array $attributes, Review $review) use ($users) {
+                        return [
+                            'user_id' => $users->random()->id,
+                            'review_id' => $review->id,
+                        ];
+                    })
+                )
+            )
+        ->create(['client_id' => $client->client->id]);
     }
 }

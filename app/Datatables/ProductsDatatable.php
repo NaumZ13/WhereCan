@@ -14,8 +14,9 @@ class ProductsDatatable {
 
         $query = Product::where('client_id', $client->id)
             ->where('is_published', $isPublished)
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->select('products.*', 'categories.name as category_name');
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.*', 'categories.name as category_name')
+            ->orderBy('products.created_at', 'desc');
 
         if(request()->has('filters.search') && request('filters.search') != '') {
             $query->where('products.name', 'like', '%' . request('filters.search') . '%')

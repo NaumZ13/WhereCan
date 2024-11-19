@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Clients;
 
 use App\Actions\Fortify\CreateNewClient;
 use App\Models\Role;

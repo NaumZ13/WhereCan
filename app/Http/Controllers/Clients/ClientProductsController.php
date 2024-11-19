@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Clients;
 
 use App\Datatables\ProductsDatatable;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\StoreRequest;
 use App\Http\Requests\Products\UpdateRequest;
 use App\Models\Category;

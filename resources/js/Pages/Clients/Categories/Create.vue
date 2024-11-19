@@ -1,8 +1,8 @@
 <template>
-    <AppLayout title="Create Product">
+    <AppLayout title="Create Category">
         <div class="flex flex-col min-h-screen items-center p-10">
             <div class="mb-6">
-                <h1 class="font-bold text-5xl">Create Product</h1>
+                <h1 class="font-bold text-5xl">Create Category</h1>
             </div>
             <form @submit.prevent="submit" class="w-full max-w-lg">
                 <div class="mb-4">
@@ -19,29 +19,6 @@
                 </div>
 
                 <div class="mb-4">
-                    <InputLabel for="description" value="Product Description" />
-                    <textarea id="description" v-model="form.description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-200 rounded-lg border border-gray-900 focus:ring-blue-500 focus:border-blue-500" placeholder="Prudoct Description ( Optional )"></textarea>
-                    <InputError class="mt-2" :message="form.errors.description" />
-                </div>
-                
-                <div class="mb-4">
-                    <InputLabel for="price" value="Product Price" />
-                    <TextInput
-                        id="price"
-                        type="number"
-                        v-model="form.price"
-                        class="mt-1 w-full bg-gray-200"
-                        required
-                        placeholder="Enter product price"
-                        step="0.01"
-                    />
-                    <InputError class="mt-2"  :message="form.errors.price" />
-                </div>
-
-                <div class="mb-1 flex justify-end">
-                    <Link :href="route('client.categories.create')" class="bg-orange-300 py-1.5 px-3 rounded-full">Create Category</Link>
-                </div>
-                <div class="mb-4">
                     <label
                         for="category"
                         class="block mb-2 text-sm font-medium text-gray-900"
@@ -49,8 +26,8 @@
                         Category
                     </label>
                     <select
-                        id="category_id"
-                        v-model="form.category_id"
+                        id="parent_id"
+                        v-model="form.parent_id"
                         class="w-full p-2 border border-gray-300 rounded-lg"
                     >
                         <option value="" disabled selected>Choose a Category</option>
@@ -72,27 +49,23 @@
     </AppLayout>
 </template>
 
-
 <script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps(['categories']);
 
 const form = useForm({
     name: '',
-    description: '',
-    price: '',
-    category_id: '',
+    parent_id: '',
 });
 
 const submit = () => {
-    form.post(route('client.products.store'));
+    form.post(route('client.categories.store'));
 };
-
 </script>

@@ -50,8 +50,11 @@ const logout = () => {
                                 <NavLink :href="route('client.dashboard')" :active="route().current('client.dashboard')" v-if="$page.props.auth.user && $page.props.auth.user.role_id === $page.props.roles.client">
                                     Dashboard
                                 </NavLink>
-                                <NavLink v-if="$page.props.auth.user && $page.props.auth.user.role_id === 3"  :href="route('client.products.index')" :active="route().current('products.index')">
+                                <NavLink v-if="$page.props.auth.user && $page.props.auth.user.role_id === 3"  :href="route('client.products.index')" :active="route().current('client.products.index')">
                                     Products
+                                </NavLink>
+                                <NavLink v-if="$page.props.auth.user && $page.props.auth.user.role_id === 3"  :href="route('client.categories.index')" :active="route().current('client.categories.index')">
+                                    Categories
                                 </NavLink>
                                 <NavLink v-else  :href="route('products.index')" :active="route().current('products.index')">
                                     Products
