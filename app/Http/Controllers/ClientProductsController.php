@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Datatables\ProductsDatatable;
 use App\Http\Requests\Products\StoreRequest;
 use App\Http\Requests\Products\UpdateRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,11 @@ class ClientProductsController extends Controller
 
     public function create()
     {
-        return inertia('Clients/Products/Create');
+        $categories = Category::all();
+
+        return inertia('Clients/Products/Create', [
+            'categories' => $categories,
+        ]);
     }
 
     public function store(StoreRequest $request)
@@ -26,12 +31,13 @@ class ClientProductsController extends Controller
         $data = $request->validated();
 
         $client = auth()->user()->client;
-
+        
         Product::create([
             'name' => $data['name'],
             'description' => $data['description'],
             'price' => $data['price'],
             'client_id' => $client->id,
+            'category_id' => $data['category_id'],
             'is_published' => true,
         ]);
 

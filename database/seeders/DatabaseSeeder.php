@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Reply;
 use App\Models\Review;
@@ -20,23 +21,38 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call(RoleSeeder::class);
+        $this->call(CategorySeeder::class);
 
         $clientRole = Role::where('name', 'client')->first();
         
         $clients = User::factory(10)->create(['role_id' => $clientRole->id]);
         $users = User::factory(10)->create(['role_id' => Role::where('name', 'user')->first()->id]);
-
+        $categories = Category::all();
+        
         Product::factory(100)
-            ->recycle($clients->pluck('client'))
+            ->state(function () use ($clients, $categories) {
+                return [
+                    'client_id' => $clients->random()->id,
+                    'category_id' => $categories->random()->id,
+                ];
+            })
             ->has(
-                Review::factory(15)->recycle($users)->has(
-                    Reply::factory(3)->state(function(array $attributes, Review $review) use ($users) {
+                Review::factory(15)
+                    ->state(function () use ($users) {
                         return [
                             'user_id' => $users->random()->id,
-                            'review_id' => $review->id,
                         ];
                     })
-                ))->create();
+                    ->has(
+                        Reply::factory(3)->state(function (array $attributes, Review $review) use ($users) {
+                            return [
+                                'user_id' => $users->random()->id,
+                                'review_id' => $review->id,
+                            ];
+                        })
+                    )
+                )
+        ->create();
         
         User::factory()->create([
             'name' => 'Naum Zdravkov',

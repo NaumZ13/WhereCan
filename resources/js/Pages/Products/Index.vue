@@ -93,7 +93,7 @@
                     <div
                         v-for="(product, index) in products"
                         :key="product.id"
-                        class="bg-purple-100 border rounded-lg shadow-md w-full sm:w-1/2 md:w-1/4 lg:w-1/5 p-5 transform transition-transform duration-300 ease-in-out hover:scale-105 hover:rotate-2 hover:shadow-lg"
+                        class="bg-purple-100 border rounded-lg shadow-md w-full sm:w-1/2 md:w-1/4 lg:w-1/5 p-5 transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
                     >
                         <img
                             class="rounded-t-lg w-full h-48 object-cover"

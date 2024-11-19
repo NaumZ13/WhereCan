@@ -38,6 +38,23 @@
                     <InputError class="mt-2"  :message="form.errors.price" />
                 </div>
 
+                <div class="mb-4">
+                    <label
+                        for="category"
+                        class="block mb-2 text-sm font-medium text-gray-900"
+                    >
+                        Category
+                    </label>
+                    <select
+                        id="category_id"
+                        v-model="form.category_id"
+                        class="w-full p-2 border border-gray-300 rounded-lg"
+                    >
+                        <option value="" disabled selected>Choose a Category</option>
+                        <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+                    </select>
+                </div>
+
                 <div class="flex justify-between">
                 <Link :href="route('client.dashboard')" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
                     Back
@@ -62,10 +79,13 @@ import TextInput from '@/Components/TextInput.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link, useForm } from '@inertiajs/vue3';
 
+const props = defineProps(['categories']);
+
 const form = useForm({
     name: '',
     description: '',
     price: '',
+    category_id: '',
 });
 
 const submit = () => {
